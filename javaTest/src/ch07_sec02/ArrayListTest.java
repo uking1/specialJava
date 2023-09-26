@@ -2,6 +2,7 @@ package ch07_sec02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +31,17 @@ public class ArrayListTest {
 			String data = iterator.next();
 			System.out.printf("%s ",data);
 		}
+		
+		//정렬해서 보기
+		System.out.println();
+		System.out.println("==================SORT=====================");
+		Collections.sort(strList);
+		printArrayAndList(strArray, strList);
+		
+		System.out.println();
+		System.out.println("==============Reverse SORT==================");
+		Collections.reverse(strList);
+		printArrayAndList(strArray, strList);
 		
 
 		// 삽입(2번째 위치에 삽입)
