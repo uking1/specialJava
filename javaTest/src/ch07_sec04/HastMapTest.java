@@ -14,6 +14,8 @@ public class HastMapTest {
 		hmDic.put("baby", "아기");
 		hmDic.put("love", "사랑");
 		hmDic.put("apple", "사과");
+		//key 객체를 중복했을때 이전의 value는 삭제됨
+		hmDic.put("apple", "사과2");
 
 		// HashaMap 출력(key -> Set 변환)
 		Set<String> keySet = hmDic.keySet();
