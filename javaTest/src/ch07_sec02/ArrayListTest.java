@@ -2,6 +2,7 @@ package ch07_sec02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class ArrayListTest {
@@ -20,8 +21,19 @@ public class ArrayListTest {
 
 		// 가져오기
 		printArrayAndList(strArray, strList);
+		
+		
+		//ArrayList >> Iterator변환해서 출력
+		System.out.println("================Iterator===================");
+		Iterator<String> iterator = strList.iterator();
+		while(iterator.hasNext()) {
+			String data = iterator.next();
+			System.out.printf("%s ",data);
+		}
+		
 
 		// 삽입(2번째 위치에 삽입)
+		System.out.println();
 		strArray[1] = new String("저길동");
 		strList.add(1, new String("저길동"));
 
