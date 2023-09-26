@@ -88,6 +88,7 @@ public class ArrayListTest {
 		System.out.printf("StrArray %s \n", (isEmpty == true) ? "배열이 비어있습니다." : "배열에 값이 있습니다.");
 		System.out.printf("strList %s \n", (strList.isEmpty() == true) ? "List가 비어있습니다." : "List에 값이 있습니다.");
 
+		System.out.println("===========================================");
 		System.out.println("The end");
 
 	}
