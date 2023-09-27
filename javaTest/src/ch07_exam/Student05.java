@@ -2,21 +2,21 @@ package ch07_exam;
 
 import java.util.Objects;
 
-public class Student {
+public class Student05 {
 	private String name;
 	private String major;
 	private int id;
 	private double gpa;
 
-	public Student() {
+	public Student05() {
 		this(null, null, 0, 0.0);
 	}
 
-	public Student(String name, int id) {
+	public Student05(String name, int id) {
 		this(name, null, id, 0.0);
 	}
 
-	public Student(String name, String major, int id, double gpa) {
+	public Student05(String name, String major, int id, double gpa) {
 		super();
 		this.name = name;
 		this.major = major;
@@ -53,11 +53,11 @@ public class Student {
 
 	@Override
 	public boolean equals(Object obj) {
-		Student stn = null;
-		if (!(obj instanceof Student)) {
+		Student05 stn = null;
+		if (!(obj instanceof Student05)) {
 			return false;
 		}
-		stn = (Student) obj;
+		stn = (Student05) obj;
 		if (this.name.equals(stn.name) && this.id == stn.id) {
 			return true;
 		}
