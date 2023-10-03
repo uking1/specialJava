@@ -1,4 +1,4 @@
-package BookMarket;
+package bookitem;
 
 public abstract class Item {
 	String bookId; // 도서 ID

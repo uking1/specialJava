@@ -1,4 +1,6 @@
-package BookMarket;
+package cart;
+
+import bookitem.Book;
 
 public interface CartInterface {
 	void printBookList(Book[] p); // 전체 도서 정보 목록 출력

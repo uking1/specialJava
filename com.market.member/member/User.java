@@ -1,4 +1,4 @@
-package BookMarket;
+package member;
 
 public class User extends Customer{
 	public User(String name, int phone) {

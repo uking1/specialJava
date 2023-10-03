@@ -1,4 +1,4 @@
-package BookMarket;
+package bookitem.copy2;
 
 public class Book extends Item{
 	private String author; // 저자

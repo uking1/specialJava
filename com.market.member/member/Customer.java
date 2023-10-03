@@ -1,4 +1,4 @@
-package BookMarket;
+package member;
 
 public class Customer {
 	private String name; // 고객 이름

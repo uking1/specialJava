@@ -1,6 +1,14 @@
-package BookMarket;
+package main;
 
 import java.util.Scanner;
+
+import bookitem.Book;
+import cart.Cart;
+import member.Admin;
+import member.User;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class WelcomeBookMarket {
 	static Scanner scan = new Scanner(System.in);
@@ -113,8 +121,53 @@ public class WelcomeBookMarket {
 	}
 
 	public static void menuCartBill() {
-		System.out.println("7. 영수증 표시하기");
+//		System.out.println("7. 영수증 표시하기");
+		if (cart.cartCount == 0) {
+			System.out.println("장바구니에 항목이 없습니다.");
+		}else {
+			System.out.println("배송받을 분은 고객정보와 같습니까? Y | N");
+			String input = scan.nextLine();
+		
+			String str = scan.nextLine();
+			if(str.toUpperCase().equals("Y")||str.toUpperCase().equals("y")) {
+				System.out.print("배송지를 입력해주세요 ");
+				String address = scan.nextLine();
+				// 주문 처리 후 영수증 출력 메서드 호출
+				printBill(user.getName(), String.valueOf(user.getPhone()),address);
+			}else {
+				System.out.print("배송받을 고객명을 입력하세요 ");
+				String name = scan.nextLine();
+				System.out.print("배송받을 고객의 연락처를 입력하세요 ");
+				String phone = scan.nextLine();
+				System.out.print("배송받을 고객의 배송지를 입력해주세요 ");
+				String address = scan.nextLine();
+				printBill(name, phone, address);
+			}
+		}
+	}
 
+	private static void printBill(String name, String phone, String address) {
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
+		String strDate = formatter.format(date);
+		System.out.println();
+		System.out.println("-------------배송 받을 고객 정보------------- ");
+		System.out.println("고객명 : " + name + "  \t\t연락처 : " + phone);
+		System.out.println("배송지 : " + address + "\t발송일 : " + strDate);
+		
+		// 장바구니에 담긴 항목 출력
+		cart.printCart();
+		
+		// 장바구니에 담긴 항목의 총 금액 계산
+		int sum = 0;
+		for (int i = 0; i< cart.cartCount; i++) {
+			sum += cart.cartItem[i].getTotalPrice();
+		}
+		System.out.println("\t\t\t주문 총금액 : " + sum + "원\n");
+		System.out.println("---------------------------------------- ");
+		System.out.println();
+		
+		
 	}
 
 	public static void menuCartRemoveItem() {
