@@ -1,21 +1,19 @@
 package main;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import bookitem.Book;
 import cart.Cart;
+import exception.CartException;
 import member.Admin;
 import member.User;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class WelcomeBookMarket {
 	static Scanner scan = new Scanner(System.in);
 	static final int NUM_BOOK = 3; // 도서 개수
 	static final int NUM_ITEM = 8; // 도서 정보의 개수
-//	static CartItem[] cartItem = new CartItem[NUM_BOOK]; // 장바구니
-//	static int cartCount = 0; // 장바구니 도서 개수
 	
 	static Cart cart = new Cart();
 	static User user; // 사용자
@@ -24,10 +22,10 @@ public class WelcomeBookMarket {
 		String name; // 고객 이름
 		int phone; // 연락처
 		int num; // 메뉴 번호 선택
-//		String[][] bookInfoList = new String[NUM_BOOK][NUM_ITEM]; // 도서 정보 목록
 		Book[] bookInfoList = new Book[NUM_BOOK];
 		
-		System.out.print("당신의 이름을 입력하세요 : ");
+		System.out.println("Book Market 고객 정보 입력");
+		System.out.print("고객의 이름을 입력하세요 : ");
 		name = scan.next();
 
 		System.out.print("연락처를 입력하세요 : ");
@@ -40,7 +38,8 @@ public class WelcomeBookMarket {
 
 		while (!flag) {
 			menuIntroduction();
-
+			
+		try {
 			System.out.print("메뉴 번호를 선택해주세요 : ");
 			num = scan.nextInt();
 
@@ -49,8 +48,7 @@ public class WelcomeBookMarket {
 			} else {
 				switch (num) {
 				case 1:
-//					System.out.println("현재 고객 정보");
-//					System.out.println("이름 : " + name + ",   연락처 : " + phone);
+					// 현재 고객 정보
 					menuGuestInfo(name, phone);
 					break;
 				case 2:
@@ -63,7 +61,6 @@ public class WelcomeBookMarket {
 					break;
 				case 4:
 //					System.out.println("4. 장바구니에 항목 추가하기 : ");
-//					menuCartAddItem(bookInfoList);
 					menuCartAddItem(bookInfoList);
 					break;
 				case 5:
@@ -91,10 +88,15 @@ public class WelcomeBookMarket {
 
 				}
 			}
-
+		} catch(CartException e) {
+			System.out.println(e.getMessage());
+			flag = true;
+		}	catch(Exception e) {
+			System.out.println("잘못된 메뉴 선택으로 종료합니다.");
+			flag = true;
 		}
-
 	}
+}
 
 	private static void menuAdminLogin() {
 		System.out.println("관리자 정보를 입력하세요");
@@ -120,10 +122,11 @@ public class WelcomeBookMarket {
 
 	}
 
-	public static void menuCartBill() {
+	public static void menuCartBill() throws CartException {
 //		System.out.println("7. 영수증 표시하기");
 		if (cart.cartCount == 0) {
-			System.out.println("장바구니에 항목이 없습니다.");
+//			System.out.println("장바구니에 항목이 없습니다.");
+			throw new CartException("장바구니에 항목이 없습니다.");
 		}else {
 			System.out.println("배송받을 분은 고객정보와 같습니까? Y | N");
 			String input = scan.nextLine();
@@ -170,10 +173,40 @@ public class WelcomeBookMarket {
 		
 	}
 
-	public static void menuCartRemoveItem() {
-		System.out.println("6. 장바구니의 항목 삭제하기");
-
+	public static void menuCartRemoveItem() throws CartException{
+//		System.out.println("6. 장바구니의 항목 삭제하기");
+		if(cart.cartCount == 0) {
+			throw new CartException("장바구니에 항목이 없습니다.");
+		}else {
+			menuCartItemList();
+			boolean flag = false;
+			while(!flag) {
+				System.out.print("장바구니에서 삭제할 도서의 ID를 입력하세요 : ");
+				String str = scan.nextLine();
+				boolean findFlag = false;
+				int numId = -1;
+				
+				for(int i=0; i< cart.cartCount; i++) {
+					if (str.equals(cart.cartItem[i].getBookID())) {
+						numId = i;
+						flag = true;
+						break;
+					}
+				}
+				if(findFlag) {
+					System.out.println("장바구니의 항목을 삭제하겠습니까? Y | N");
+					str = scan.nextLine();
+					if(str.toUpperCase().equals("Y")|| str.toUpperCase().equals("y")) {
+						System.out.println(cart.cartItem[numId].getBookID() + "장바구니에서 도서가 삭제되었습니다.");
+							cart.removeCart(numId);
+					}
+					flag = true;
+			}else {
+				System.out.println("다시 입력해 주세요");
+			}
+		}
 	}
+}
 
 	public static void menuCartRemoveItemCount() {
 		System.out.println("5. 장바구니의 항목 수량 줄이기");
@@ -247,8 +280,18 @@ public class WelcomeBookMarket {
 		
 	}
 
-	public static void menuCartClear() {
-		System.out.println("장바구니 비우기:");
+	public static void menuCartClear() throws CartException{
+//		System.out.println("장바구니 비우기:");
+		if(cart.cartCount ==0) {
+			throw new CartException("장바구니에 항목이 없습니다.");
+		}else {
+			System.out.println("장바구니에 모든 항목을 삭제하겠습니까? Y | N");
+			String str = scan.nextLine();
+			if(str.toUpperCase().equals("Y")|| str.toUpperCase().equals("y")) {
+				System.out.println("장바구니에 모든 항목을 삭제했습니다.");
+				cart.deleteBook();
+			}
+		}
 
 	}
 
