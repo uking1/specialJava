@@ -6,17 +6,19 @@ public class WelcomeBookMarket {
 	static Scanner scan = new Scanner(System.in);
 	static final int NUM_BOOK = 3; // 도서 개수
 	static final int NUM_ITEM = 8; // 도서 정보의 개수
-	static CartItem[] cartItem = new CartItem[NUM_BOOK]; // 장바구니
-	static int cartCount = 0; // 장바구니 도서 개수
-
+//	static CartItem[] cartItem = new CartItem[NUM_BOOK]; // 장바구니
+//	static int cartCount = 0; // 장바구니 도서 개수
+	
+	static Cart cart = new Cart();
 	static User user; // 사용자
 
 	public static void main(String[] args) {
 		String name; // 고객 이름
 		int phone; // 연락처
 		int num; // 메뉴 번호 선택
-		String[][] bookInfoList = new String[NUM_BOOK][NUM_ITEM]; // 도서 정보 목록
-
+//		String[][] bookInfoList = new String[NUM_BOOK][NUM_ITEM]; // 도서 정보 목록
+		Book[] bookInfoList = new Book[NUM_BOOK];
+		
 		System.out.print("당신의 이름을 입력하세요 : ");
 		name = scan.next();
 
@@ -53,6 +55,7 @@ public class WelcomeBookMarket {
 					break;
 				case 4:
 //					System.out.println("4. 장바구니에 항목 추가하기 : ");
+//					menuCartAddItem(bookInfoList);
 					menuCartAddItem(bookInfoList);
 					break;
 				case 5:
@@ -124,16 +127,18 @@ public class WelcomeBookMarket {
 
 	}
 
-	public static void menuCartAddItem(String[][] book) {
+	public static void menuCartAddItem(Book[] book) {
 //		System.out.println("장바구니에 항목 추가하기:");
 		bookList(book); // 도서 정보가 저장되어 있는 메서드 호출
 		// 도서 정보 출력
-		for (int i = 0; i < NUM_BOOK; i++) {
-			for (int j = 0; j < NUM_ITEM; j++)
-				System.out.print(book[i][j] + " | ");
-			System.out.println("");
-
-		}
+//		for (int i = 0; i < NUM_BOOK; i++) {
+//			for (int j = 0; j < NUM_ITEM; j++)
+//				System.out.print(book[i][j] + " | ");
+//			System.out.println("");
+//
+//		}
+		
+		cart.printBookList(book);
 		boolean flag = false;
 
 		while (!flag) {
@@ -146,7 +151,7 @@ public class WelcomeBookMarket {
 			for (int i = 0; i < NUM_BOOK; i++) {
 				// 입력한 도서ID와 저장되어 있는 도서 정보의 ID가 일치하면
 				// 인덱스 번호와 일치 여부 변수의 값을 변경한다.
-				if (inputStr.equals(book[i][0])) {
+				if (inputStr.equals(book[i].getBookId())) {
 					numID = i;
 					findFlag = true;
 					break;
@@ -158,11 +163,12 @@ public class WelcomeBookMarket {
 				inputStr = scan.nextLine();
 
 				if (inputStr.toUpperCase().equals("Y") || inputStr.toUpperCase().equals("y")) {
-					System.out.println(book[numID][0] + " 도서가 장바구니에 추가되었습니다.");
+					System.out.println(book[numID].getBookId() + " 도서가 장바구니에 추가되었습니다.");
 
 					// 장바구니에 넣기
-					if (!isCartInBook(book[numID][0])) {
-						cartItem[cartCount++] = new CartItem(book[numID]);
+					if (!isCartInBook(book[numID].getBookId())) {
+//						cartItem[cartCount++] = new CartItem(book[numID]);
+						cart.insertBook(book[numID]);
 					}
 				}
 				flag = true;
@@ -176,14 +182,16 @@ public class WelcomeBookMarket {
 	}
 
 	public static boolean isCartInBook(String bookID) {
-		boolean flag = false;
-		for (int i = 0; i < cartCount; i++) {
-			if (bookID == cartItem[i].getBookID()) {
-				cartItem[i].setQuantity(cartItem[i].getQuantity() + 1);
-				flag = true;
-			}
-		}
-		return flag;
+//		boolean flag = false;
+//		for (int i = 0; i < cartCount; i++) {
+//			if (bookID == cartItem[i].getBookID()) {
+//				cartItem[i].setQuantity(cartItem[i].getQuantity() + 1);
+//				flag = true;
+//			}
+//		}
+//		return flag;
+		return cart.isCartInBook(bookID);
+		
 	}
 
 	public static void menuCartClear() {
@@ -192,18 +200,23 @@ public class WelcomeBookMarket {
 	}
 
 	public static void menuCartItemList() {
-		System.out.println("장바구니 상품 목록 :");
-		System.out.println("--------------------------------------------------");
-		System.out.println("   도서 ID \t|   수량 \t|     합계");
-		for (int i = 0; i < cartCount; i++) {
-			System.out.print("   " + cartItem[i].getBookID() + " \t| ");
-			System.out.print("   " + cartItem[i].getQuantity() + " \t| ");
-			System.out.print("   " + cartItem[i].getTotalPrice());
-			System.out.println("   ");
-
+//		System.out.println("장바구니 상품 목록 :");
+//		System.out.println("--------------------------------------------------");
+//		System.out.println("   도서 ID \t|   수량 \t|     합계");
+//		for (int i = 0; i < cartCount; i++) {
+//			System.out.print("   " + cartItem[i].getBookID() + " \t| ");
+//			System.out.print("   " + cartItem[i].getQuantity() + " \t| ");
+//			System.out.print("   " + cartItem[i].getTotalPrice());
+//			System.out.println("   ");
+//
+//		}
+//		System.out.println("--------------------------------------------------");
+		if (cart.cartCount >=0) {
+			cart.printCart();
 		}
-		System.out.println("--------------------------------------------------");
+		
 	}
+	
 
 	public static void menuGuestInfo(String name, int mobile) {
 		System.out.println("현재 고객 정보 : ");
@@ -227,33 +240,24 @@ public class WelcomeBookMarket {
 
 	}
 
-	public static void bookList(String[][] book) {
-		book[0][0] = "book1";
-		book[0][1] = "ISBN 978-89-01-26726-5";
-		book[0][2] = "빅 히스토리";
-		book[0][3] = "33000";
-		book[0][4] = "데이비드 크리스천";
-		book[0][5] = "우주와 지구, 인간을 하나로 잇는 새로운 역사";
-		book[0][6] = "인문 교양";
-		book[0][7] = "2022/12/23";
-
-		book[1][0] = "book2";
-		book[1][1] = "ISBN 979-11-6921-0621";
-		book[1][2] = "SICP";
-		book[1][3] = "45000";
-		book[1][4] = "해럴드 에이블슨, 류광";
-		book[1][5] = "컴퓨터 프로그래밍의 구조와 해석";
-		book[1][6] = "개발 방법론";
-		book[1][7] = "2022/12/30";
-
-		book[2][0] = "book3";
-		book[2][1] = "ISBN 978-89-6626-366-0";
-		book[2][2] = "러스트 프로그래밍";
-		book[2][3] = "35000";
-		book[2][4] = "팀 맥나마라, 장연호";
-		book[2][5] = "러스트는 시스템 프로그래밍에 적합한 언어";
-		book[2][6] = "프로그래밍 언어";
-		book[2][7] = "2022/07/08";
+	public static void bookList(Book[] book) {
+		book[0] = new Book("book1","ISBN 978-89-01-26726-5", "빅 히스토리",33000);
+		book[0].setAuthor("데이비드 크리스천");
+		book[0].setDescription("우주와 지구, 인간을 하나로 잇는 새로운 역사");
+		book[0].setCategory("인문 교양");
+		book[0].setReleaseDate("2022/12/23");
+		
+		book[1] = new Book("book2", "ISBN 979-11-6921-062-1", "SICP", 45000);
+		book[1].setAuthor("해럴브 에이블슨, 류광");
+		book[1].setDescription("컴퓨터 프로그래밍의 구조와 해석");
+		book[1].setCategory("개발 방법론");
+		book[1].setReleaseDate("2022/12/30");
+		
+		book[2] = new Book("book3","ISBN 978-89-6626-366-0","러스트 프로그래밍",35000);
+		book[2].setAuthor("팀 맥나마라, 장연호");
+		book[2].setDescription("러스트는 시스템 프로그래밍에 적합한 언어");
+		book[2].setCategory("프로그래밍 언어");
+		book[2].setReleaseDate("2022/07/08");
 
 	}
 
