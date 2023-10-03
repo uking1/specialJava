@@ -37,7 +37,7 @@ public class Cart implements CartInterface {
 			}
 		}
 		
-		return false;
+		return flag;
 	}
 
 	@Override
